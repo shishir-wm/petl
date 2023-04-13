@@ -8,11 +8,13 @@ from tqdm import tqdm, trange
 from model import BertClassifier
 from transformers import BertTokenizer, AdamW , get_linear_schedule_with_warmup
 
+wandb.login(key='47b902a934ae454c8f27172975b4447962dc10ca')
+
 class Trainer:
     def __init__(self):
         self.model = BertClassifier(num_labels = 1)
         self.gpu_present = torch.cuda.is_available()
-        wandb.init(project="c4ai-adapter-bert")
+        wandb.init(project="shishir-c4ai-adapter-bert")
 
         if self.gpu_present:
             self.model = self.model.cuda()
@@ -31,7 +33,9 @@ class Trainer:
         
         self.optimizer = AdamW(params, lr=LEARNING_RATE)
         self.scheduler = get_linear_schedule_with_warmup(
-            self.optimizer, num_warmup_steps = int(0.1 * len(self.train_dataset))*EPOCHS
+            self.optimizer,
+            num_warmup_steps=int(0.1 * len(self.train_dataset))*EPOCHS,
+            num_training_steps=len(self.train_dataset)*EPOCHS
         )
 
 

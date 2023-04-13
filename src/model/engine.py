@@ -8,5 +8,5 @@ class BertClassifier(nn.Module):
         self.classifier = nn.Linear(768, num_labels)
 
     def forward(self, x):
-        cls_token = self.bert_model(x).last_hidden_state[0,0,:]
+        cls_token = self.bert_model(x).last_hidden_state[:, 0, :]
         return self.classifier(cls_token)
